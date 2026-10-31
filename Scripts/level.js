@@ -10,6 +10,9 @@ function Level() {
     this.goalImage = new Image();
     this.goalImage.src = "GFX/Goal.png";
 
+    this.walkingSnd = new Sound("SFX/Walking.mp3");
+    this.levelCompleteSnd = new Sound("SFX/LevelComplete.mp3");
+
     this.player = new Player();
     this.playerCoords = { x: 0, y: 0 };
     this.pushingBoxCoords = { x: -1, y: -1 };
@@ -69,7 +72,10 @@ function Level() {
 
             if(this.isLevelCompleted()) {
                 this.completeTimeOut.launch();
+                this.levelCompleteSnd.play();
             }
+
+            this.walkingSnd.play();
         }
     }
 
