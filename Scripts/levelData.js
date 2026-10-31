@@ -1,3 +1,10 @@
+var unlockedLevels = JSON.parse(loadData("SokoBanJS_unlockedLevels")) || 1;
+
+function incrementUnlockedLevels() {
+    unlockedLevels++;
+    saveData("SokoBanJS_unlockedLevels", JSON.stringify(unlockedLevels));
+}
+
 var LEVELS = [
 
   // Original Soko-Ban - Round 001

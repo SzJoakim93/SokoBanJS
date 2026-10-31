@@ -1,4 +1,5 @@
 function InGame() {
+    this.levelIndex = 0;
     this.currentLevel = null;
     this.currentLevel = new Level();
 
@@ -10,7 +11,7 @@ function InGame() {
         { text: "Main Menu", action: function() { inGameScene.goToMainMenu(); } }
     ];
 
-    this.completeMenu = new PopUpMenu(canvas.width / 2 - 100, canvas.height / 2 - 100, 200, 200, "Level Complete");
+    this.completeMenu = new PopUpMenu(canvas.width / 2 - 100, canvas.height / 2 - 125, 250, 200, "Level Complete");
     this.completeMenu.menuPoints = [
         { text: "Next Level", action: function() { inGameScene.nextLevel(); } },
         { text: "Restart", action: function() { inGameScene.restartLevel(); } },
@@ -20,7 +21,21 @@ function InGame() {
     this.currentPopupMenu = null;
 
     this.loadLevel = function(levelIndex) {
+        this.currentLevelIndex = levelIndex;
         this.currentLevel.load(levelIndex);
+        this.currentPopupMenu = null;
+    }
+
+    this.nextLevel = function() {
+        this.currentLevelIndex++;
+        if (this.currentLevelIndex >= LEVELS.length) {
+            return;
+        }
+        if (this.currentLevelIndex > unlockedLevels - 1) {
+            incrementUnlockedLevels();
+        }
+        this.loadLevel(this.currentLevelIndex);
+        this.currentPopupMenu = null;
     }
 
     this.handleEvents = function() {

@@ -1,6 +1,5 @@
 function Menu() {
     this.selectedLevel = 0;
-    this.unlockedLevels = JSON.parse(localStorage.getItem("SokoBanJS_unlockedLevels")) || 1;
 
     this.handleEvents = function() {
         this.selectUp = function() {
@@ -9,7 +8,7 @@ function Menu() {
             }
         }
         this.selectDown = function() {
-            if (this.selectedLevel < this.unlockedLevels - 1) {
+            if (this.selectedLevel < unlockedLevels - 1) {
                 this.selectedLevel++;
             }
         }
@@ -21,7 +20,7 @@ function Menu() {
         }
 
         this.selectRight = function() {
-            if (this.selectedLevel < this.unlockedLevels - 14) {
+            if (this.selectedLevel < unlockedLevels - 14) {
                 this.selectedLevel += 14;
             }
         }
@@ -37,7 +36,7 @@ function Menu() {
             if (i === this.selectedLevel) {
                 fontPurple.apply("L" + (i + 1).toString(), 50 + Math.floor(i / 14) * 150, 25 + (i % 14) * 30);
                 continue;
-            } else if (i < this.unlockedLevels) {
+            } else if (i < unlockedLevels) {
                 fontCyan.apply("L" + (i + 1).toString(), 50 + Math.floor(i / 14) * 150, 25 + (i % 14) * 30);
             } else {
                 fontWhite.apply("L" + (i + 1).toString(), 50 + Math.floor(i / 14) * 150, 25 + (i % 14) * 30);

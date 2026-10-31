@@ -3,6 +3,8 @@ function Level() {
     this.boxImage.src = "GFX/Box.png";
     this.boxGoalImage = new Image();
     this.boxGoalImage.src = "GFX/BoxOnGoal.png";
+    this.boxCompleteEffectImage = new Image();
+    this.boxCompleteEffectImage.src = "GFX/BoxCompleteEffect.png";
     this.wallImage = new Image();
     this.wallImage.src = "GFX/Wall.png";
     this.goalImage = new Image();
@@ -15,6 +17,10 @@ function Level() {
 
     this.offsetX = 0;
     this.offsetY = 0;
+
+    this.completeTimeOut = new TimeoutEvent(100, function() {
+        inGameScene.currentPopupMenu = inGameScene.completeMenu;
+    }, this);
     
     this.load = function(levelIndex) {
         this.level = [];
@@ -62,7 +68,7 @@ function Level() {
             this.player.move(moveX, moveY, pushingBox);
 
             if(this.isLevelCompleted()) {
-                inGameScene.currentPopupMenu = inGameScene.completeMenu;
+                this.completeTimeOut.launch();
             }
         }
     }
@@ -78,6 +84,8 @@ function Level() {
             this.pushingBoxCoords.x = -1;
             this.pushingBoxCoords.y = -1;
         }
+
+        this.completeTimeOut.handleEvent();
     }
 
     this.rendering = function() {
@@ -109,7 +117,9 @@ function Level() {
                     case '*':
                         if (this.pushingBoxCoords.x === j && this.pushingBoxCoords.y === i) {
                             ctx.drawImage(this.goalImage, j * TILE_SIZE_X + 6 + this.offsetX, i * TILE_SIZE_Y + 4 + this.offsetY);
-                            ctx.drawImage(this.boxGoalImage, j * TILE_SIZE_X + 6 - this.player.moveX + this.offsetX, i * TILE_SIZE_Y - this.player.moveY + this.offsetY);
+                            ctx.drawImage(this.boxGoalImage, j * TILE_SIZE_X + 6 - this.player.moveX + this.offsetX, i * TILE_SIZE_Y + 4 - this.player.moveY + this.offsetY);
+                        } else if (this.completeTimeOut.isLaunched()) {
+                            ctx.drawImage(this.completeTimeOut.currentTime % 4 < 2 ? this.boxCompleteEffectImage : this.boxGoalImage, j * TILE_SIZE_X + 6 + this.offsetX, i * TILE_SIZE_Y + 4 + this.offsetY);
                         } else {    
                             ctx.drawImage(this.boxGoalImage, j * TILE_SIZE_X + 6 + this.offsetX, i * TILE_SIZE_Y + 4 + this.offsetY);
                         }
