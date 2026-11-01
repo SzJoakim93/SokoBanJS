@@ -21,12 +21,18 @@ function Level() {
     this.offsetX = 0;
     this.offsetY = 0;
 
+    this.moves = 0;
+    this.pushes = 0;
+    this.timeElasped = new TimeInc(fontBlack);
+    this.completed = false;
+
     this.completeTimeOut = new TimeoutEvent(100, function() {
         inGameScene.currentPopupMenu = inGameScene.completeMenu;
     }, this);
     
     this.load = function(levelIndex) {
         this.level = [];
+        this.reset();
         for (var i = 0; i < LEVELS[levelIndex].length; i++) {
             for (var j = 0; j < LEVELS[levelIndex][i].length; j++) {
                 if (!this.level[i]) this.level[i] = [];
@@ -36,7 +42,7 @@ function Level() {
                     this.playerCoords.x = j;
                     this.playerCoords.y = i;
                 }
-                if (this.level[i][j] === '.') {
+                if (this.level[i][j] === '.' || this.level[i][j] === '*' || this.level[i][j] === '+') {
                     this.goalCount++;
                 }
             }
@@ -44,6 +50,15 @@ function Level() {
 
         this.offsetX = (canvas.width - this.getMaxWidth() * TILE_SIZE_X) / 2;
         this.offsetY = (canvas.height - this.level.length * TILE_SIZE_Y) / 2;
+    }
+
+    this.reset = function() {
+        this.moves = 0;
+        this.pushes = 0;
+        this.goalCount = 0;
+        this.completed = false;
+        this.timeElasped.reset(0, 0);
+        this.completeTimeOut.reset();
     }
 
     this.move = function(moveX, moveY) {
@@ -63,6 +78,7 @@ function Level() {
                 this.pushingBoxCoords.x = boxNextX;
                 this.pushingBoxCoords.y = boxNextY;
                 this.moveBox(nextX, nextY, boxNextX, boxNextY);
+                this.pushes++;
             }
 
             this.playerCoords.x = nextX;
@@ -70,7 +86,15 @@ function Level() {
             this.setPlayer(nextX, nextY);
             this.player.move(moveX, moveY, pushingBox);
 
-            if(this.isLevelCompleted()) {
+            this.moves++;
+            if (!this.completed && this.isLevelCompleted()) {
+                this.completed = true;
+                saveLevelState(
+                    inGameScene.currentLevelIndex,
+                    this.moves,
+                    this.pushes,
+                    this.timeElasped.m * 60 + this.timeElasped.s
+                );
                 this.completeTimeOut.launch();
                 this.levelCompleteSnd.play();
             }
@@ -92,6 +116,7 @@ function Level() {
         }
 
         this.completeTimeOut.handleEvent();
+        this.timeElasped.handleEvent();
     }
 
     this.rendering = function() {
@@ -126,13 +151,23 @@ function Level() {
                             ctx.drawImage(this.boxGoalImage, j * TILE_SIZE_X + 6 - this.player.moveX + this.offsetX, i * TILE_SIZE_Y + 4 - this.player.moveY + this.offsetY);
                         } else if (this.completeTimeOut.isLaunched()) {
                             ctx.drawImage(this.completeTimeOut.currentTime % 4 < 2 ? this.boxCompleteEffectImage : this.boxGoalImage, j * TILE_SIZE_X + 6 + this.offsetX, i * TILE_SIZE_Y + 4 + this.offsetY);
-                        } else {    
+                        } else {
                             ctx.drawImage(this.boxGoalImage, j * TILE_SIZE_X + 6 + this.offsetX, i * TILE_SIZE_Y + 4 + this.offsetY);
                         }
                         break;
                 }
             }
         }
+
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, canvas.height - 18, canvas.width, 18);
+        fontBlack.apply((inGameScene.levelIndex < 10 ? "0" : "") + (inGameScene.levelIndex + 1).toString(), 4, canvas.height - 16);
+        ctx.fillStyle = "#ff55ff";
+        ctx.fillRect(40, canvas.height - 18, 4, 18);
+        fontBlack.apply("Moves: " + this.moves.toString(), 56, canvas.height - 16);
+        fontBlack.apply("Pushes: " + this.pushes.toString(), 242, canvas.height - 16);
+        fontBlack.apply("Time: ", 442, canvas.height - 16);
+        this.timeElasped.rendering(524, canvas.height - 16);
     }
 
     this.isLevelCompleted = function() {

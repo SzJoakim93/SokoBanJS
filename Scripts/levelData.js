@@ -1,8 +1,16 @@
-var unlockedLevels = JSON.parse(loadData("SokoBanJS_unlockedLevels")) || 1;
+var levelStates = JSON.parse(loadData("SokoBanJS_levelStates") || "[]");
+if (!Array.isArray(levelStates)) {
+    throw new Error("Stored level states must be an array.");
+}
 
-function incrementUnlockedLevels() {
-    unlockedLevels++;
-    saveData("SokoBanJS_unlockedLevels", JSON.stringify(unlockedLevels));
+var unlockedLevels = levelStates.length + 1;
+
+function saveLevelState(levelIndex, moves, pushes, time) {
+  if (levelStates[levelIndex] && levelStates[levelIndex].moves <= moves && levelStates[levelIndex].pushes <= pushes && levelStates[levelIndex].time <= time) {
+    levelStates[levelIndex] = { moves: moves, pushes: pushes, time: time };
+    unlockedLevels = levelStates.length;
+    saveData("SokoBanJS_levelStates", JSON.stringify(levelStates));
+  }
 }
 
 var LEVELS = [

@@ -1,4 +1,4 @@
-function TimeoutEvent(time, callbackFunc, obj) {
+function TimeoutEvent(time, callbackFunc, obj, isInfinite) {
     this.maxTime = time;
     this.currentTime = 0;
     this.callbackFunc = callbackFunc;
@@ -15,16 +15,24 @@ function TimeoutEvent(time, callbackFunc, obj) {
             this.currentTime--;
 
             if (this.currentTime === 1) {
-                if (this.obj) {
-                    callbackFunc(this.obj);
-                } else {
-                    callbackFunc();
+                if (this.callbackFunc) {
+                    if (this.obj) {
+                        callbackFunc(this.obj);
+                    } else {
+                        callbackFunc();
+                    }
                 }
+                
+                this.currentTime = isInfinite ? this.maxTime : 0;
             }
         }
     }
 
     this.isLaunched = function() {
         return this.currentTime > 0;
+    }
+
+    this.reset = function() {
+        this.currentTime = 0;
     }
 }

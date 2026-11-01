@@ -31,15 +31,12 @@ function InGame() {
         if (this.currentLevelIndex >= LEVELS.length) {
             return;
         }
-        if (this.currentLevelIndex > unlockedLevels - 1) {
-            incrementUnlockedLevels();
-        }
         this.loadLevel(this.currentLevelIndex);
         this.currentPopupMenu = null;
     }
 
     this.handleEvents = function() {
-        if (this.currentLevel) {
+        if (this.currentLevel && !this.currentPopupMenu) {
             this.currentLevel.handleEvents();
         }
     }
@@ -89,6 +86,7 @@ function InGame() {
     this.select = function() {
         if (this.currentPopupMenu) {
             this.currentPopupMenu.select();
+            return;
         }
     }
 

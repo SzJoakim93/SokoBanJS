@@ -2,6 +2,7 @@ var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
 var fontWhite = new Font("GFX/Fonts.png", 10, 9, 16, 16);
+var fontBlack = new Font("GFX/FontsBlack.png", 10, 9, 16, 16);
 var fontCyan = new Font("GFX/FontsCyan.png", 10, 9, 16, 16);
 var fontPurple = new Font("GFX/FontsPurple.png", 10, 9, 16, 16);
 
