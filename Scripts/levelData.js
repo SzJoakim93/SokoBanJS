@@ -8,7 +8,7 @@ var unlockedLevels = levelStates.length + 1;
 function saveLevelState(levelIndex, moves, pushes, time) {
   if (levelStates[levelIndex] && levelStates[levelIndex].moves <= moves && levelStates[levelIndex].pushes <= pushes && levelStates[levelIndex].time <= time) {
     levelStates[levelIndex] = { moves: moves, pushes: pushes, time: time };
-    unlockedLevels = levelStates.length;
+    unlockedLevels = levelStates.length + 1;
     saveData("SokoBanJS_levelStates", JSON.stringify(levelStates));
   }
 }
