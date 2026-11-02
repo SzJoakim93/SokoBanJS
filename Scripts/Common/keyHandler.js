@@ -1,15 +1,16 @@
 var keystates = [];
 
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("keydown", keyDownHandler, true);
+document.addEventListener("keyup", keyUpHandler, true);
 
 function keyDownHandler(e) {
+  var keyCode = e.keyCode || e.which;
   if (scene.IsInputActive && scene.IsInputActive()) {
-    if (e.which === KEY_BACKSPACE) {
+    if (keyCode === KEY_BACKSPACE) {
       e.preventDefault();
       scene.InputChar("Backspace");
       return;
-    } else if (e.which === KEY_SPACE) {
+    } else if (keyCode === KEY_SPACE) {
       e.preventDefault();
       scene.InputChar(" ");
       return;
@@ -17,16 +18,16 @@ function keyDownHandler(e) {
       e.preventDefault();
       scene.InputChar(e.key.toUpperCase());
       return;
-    } else if (e.which === KEY_RETURN) {
+    } else if (keyCode === KEY_RETURN) {
       e.preventDefault();
       scene.FinishInput();
       return;
     }
   }
-  
-  e.preventDefault(); 
+
+  e.preventDefault();
   e.stopPropagation();
-  processKeyDown(e.which);
+  processKeyDown(keyCode);
 }
 
 function processKeyDown(keyCode) {
@@ -34,19 +35,20 @@ function processKeyDown(keyCode) {
 
   if ((keyCode === KEY_RETURN || keyCode === KEY_SPACE || keyCode === KEY_LSHIFT) && scene.select) {
     scene.select();
-  } else if (keyCode === KEY_UP && scene.selectUp) {
+  } else if (keyCode === KEY_UP || keyCode === KEY_W && scene.selectUp) {
     scene.selectUp();
-  } else if (keyCode === KEY_DOWN && scene.selectDown) {
+  } else if (keyCode === KEY_DOWN || keyCode === KEY_S && scene.selectDown) {
     scene.selectDown();
-  } else if (keyCode === KEY_LEFT && scene.selectLeft) {
+  } else if (keyCode === KEY_LEFT || keyCode === KEY_A && scene.selectLeft) {
     scene.selectLeft();
-  } else if (keyCode === KEY_RIGHT && scene.selectRight) {
+  } else if (keyCode === KEY_RIGHT || keyCode === KEY_D && scene.selectRight) {
     scene.selectRight();
-  } else if (keyCode === KEY_ESCAPE && scene.pause) {
+  } else if (keyCode === KEY_ESCAPE || keyCode === KEY_P && scene.pause) {
     scene.pause();
   }
 }
 
 function keyUpHandler(e) {
-  keystates[e.which] = false;
+  var keyCode = e.keyCode || e.which;
+  keystates[keyCode] = false;
 }

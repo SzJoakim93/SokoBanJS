@@ -41,6 +41,10 @@ function getCanvasCoordinates(e) {
 sizeCanvas();
 addEventListener("resize", sizeCanvas);
 
+window.onload = function() {
+    canvas.focus();
+};
+
 window.requestAnimationFrame = function() {
     return window.requestAnimationFrame ||
        	window.webkitRequestAnimationFrame ||

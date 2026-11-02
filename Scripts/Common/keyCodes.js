@@ -73,3 +73,14 @@ var KEY_KP_PLUS = 107;
 var KEY_KP_ENTER = 108;
 var KEY_KP_MINUS = 109;
 var KEY_KP_DIVIDE = 111;
+
+//Vidaa Remote Keys
+var RED = 403;      // Red button
+var GREEN = 404;    // Green button
+var YELLOW = 405;   // Yellow button
+var BLUE = 406;     // Blue button
+var PLAY = 415;
+var PAUSE = 19;
+var STOP = 413;
+var FAST_FORWARD = 417;
+var REWIND = 412

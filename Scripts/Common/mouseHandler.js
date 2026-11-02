@@ -18,6 +18,7 @@ function mouseMoveHandler(e) {
 }
 
 function clickHandler(e) {
+    canvas.requestPointerLock();
     if (e.target && e.target.closest && e.target.closest(".touch-button")) {
         return;
     }
