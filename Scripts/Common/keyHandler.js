@@ -23,7 +23,9 @@ function keyDownHandler(e) {
       return;
     }
   }
-
+  
+  e.preventDefault(); 
+  e.stopPropagation();
   processKeyDown(e.which);
 }
 
