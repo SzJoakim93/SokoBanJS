@@ -1,11 +1,11 @@
 function gamepadButtonDownHandler() {
-    if (scene.selectUp && isActionPressed("up", true)) {
+    if (scene.selectUp && isActionPressed("up", false)) {
         scene.selectUp();
-    } else if (scene.selectDown && isActionPressed("down", true)) {
+    } else if (scene.selectDown && isActionPressed("down", false)) {
         scene.selectDown();
-    } else if (scene.selectLeft && isActionPressed("left", true)) {
+    } else if (scene.selectLeft && isActionPressed("left", false)) {
         scene.selectLeft();
-    } else if (scene.selectRight && isActionPressed("right", true)) {
+    } else if (scene.selectRight && isActionPressed("right", false)) {
         scene.selectRight();
     } else if (scene.select && isActionPressed("a", true)) {
         scene.select();
